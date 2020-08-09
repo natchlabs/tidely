@@ -14,14 +14,14 @@ Geocoding is provided by the [HERE Developer geocoding api](https://developer.he
 
 ## General
 
-- The [dashboard](##dashboard) is the main screen of the application; a returning user is brought here upon login.
-- The dashboard contains a list of all of the times and places at which the user may engage in the [activities](##activities) which they have indicated that they are interested in.
-- Associated with a user account will be a list of the activities that a user is interested in and the [weather conditions](###weather-preferences) which they desire for these activities.
+- The [dashboard](#dashboard) is the main screen of the application; a returning user is brought here upon login.
+- The dashboard contains a list of all of the times and places at which the user may engage in the [activities](#activities) which they have indicated that they are interested in.
+- Associated with a user account will be a list of the activities that a user is interested in and the [weather conditions](#weather-preferences) which they desire for these activities.
 - Also associated with a user account will be a list of the beaches / locations at which the user desires to engage in their activities of interest list.
-- The default mode of the application is to use the fixed list of beaches for activity recommendations. The user may change the mode of the application to 'nearby', which will make recommendations at nearby beaches. For how this interacts with filtering, see [filtering](###filtering).
+- The default mode of the application is to use the fixed list of beaches for activity recommendations. The user may change the mode of the application to 'nearby', which will make recommendations at nearby beaches. For how this interacts with filtering, see [filtering](#filtering).
     - The last used mode of the application is remembered by the application on subsequent logins.
     - The radius used to find nearby beaches may be specified by the user.
-- The user may add and remove which activities they are interested in on the [activities screen](##activities-screen). They may also change the weather conditions they desire for each activity at this screen.
+- The user may add and remove which activities they are interested in on the [activities screen](#activities-screen). They may also change the weather conditions they desire for each activity at this screen.
     - This screen is the screen to which the user is brought upon registration.
 - The application contains a warning to the user to use it at their own discretion, as it is not possible for information surrounding which beaches have no access points or are private to be incorporated into the application's recommendations.
 
@@ -34,8 +34,8 @@ Geocoding is provided by the [HERE Developer geocoding api](https://developer.he
     - Each element will display the timespan at which the weather requirements are met (e.g. 8.00-10.00am) and the location at which these requirements are met.
     - For further information (i.e. the exact weather information over this timespan) the element may be clicked and a drawer will appear from the right hand side of the screen containing the information.
 - Cards may be dragged and dropped by the user to reorder them.
-- There are [filtering](###filtering) buttons at the top of the dashboard which allow the user to filter certain elements out of the card displays.
-    - Additionally, there are filtering buttons at the top right of every card. By default the global filter is applied, but if a card specific filter is applied then it will be combined with the global filter in the way described under [filtering](###filtering).
+- There are [filtering](#filtering) buttons at the top of the dashboard which allow the user to filter certain elements out of the card displays.
+    - Additionally, there are filtering buttons at the top right of every card. By default the global filter is applied, but if a card specific filter is applied then it will be combined with the global filter in the way described under [filtering](#filtering).
 
 ### Filtering
 
