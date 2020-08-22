@@ -72,7 +72,7 @@ Geocoding is provided by the [HERE Developer geocoding api](https://developer.he
 ### Weather preferences
 
 - When deciding which timespans the user may want to perform an activity, the application will look at the weather preferences and find timespans which simultaneously meet all of the weather criteria.
-- The basic criteria include wind speed, tide level, "feels like" temperature, cloud cover, and sun position (e.g. a possible configuration could be 'after sunrise and before sunset'), and rainfall level.
+- The basic criteria include wind speed, tide level, "feels like" temperature, cloud cover, sun position (e.g. a possible configuration could be 'after sunrise and before sunset'), and rainfall level.
 - More advanced options such as humidity, moon phase, wind direction, swell direction, swell height, and swell period are also available.
 - The user is not required to set a preference for every weather option; those which the user has no preference towards will not be factored into filtering out results which don't match the user's desires.
 
