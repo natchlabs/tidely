@@ -1,18 +1,10 @@
 import functools
 import itertools as it
 import datetime
-def parseResponse(response):
-    return [combine(hourly, 'time', toDatetime(day['date'], hourly['time'])) for day in response['data']['weather'] for hourly in day['hourly']]
 
-LOCAL_TIMEZONE = datetime.datetime.now(datetime.timezone(datetime.timedelta(0))).astimezone().tzinfo
+import tidely_parse as p
 
-def toDatetime(date, time):
-    d = [int(a) for a in date.split('-')]
-    return datetime.datetime(*d, int(int(time) / 100), tzinfo=LOCAL_TIMEZONE)
 
-def combine(thing, key, value):
-    thing[key] = value
-    return thing
 class WeatherMatcher:
     def __init__(self, prop, lower, upper):
         self.prop = prop
@@ -36,23 +28,23 @@ class WeatherConfiguration:
     def testChunk(self, weatherChunk):
         return functools.reduce(lambda acc,cur: cur(weatherChunk) and acc, self.matchers, True)
     
-    def mergeChunks(self, chunks, location):
+    def mergeChunks(self, chunks):
         startTime = chunks[0]['time']
         endTime = startTime + datetime.timedelta(hours=len(chunks))
         return {
             'startTime': str(startTime),
             'endTime': str(endTime),
             'activity': self.activity,
-            'location': location,
+            'location': chunks[0]['location'],
             'weather': {
                 'desc': chunks[0]['weatherDesc'],
                 'icon': chunks[0]['weatherIconUrl']
             }
         }
 
-    def __call__(self, weatherChunks, location):
+    def __call__(self, weatherChunks):
         validSections = [list(groups) for key, groups in it.groupby(weatherChunks, self.testChunk) if key]
-        elements = [self.mergeChunks(x, location) for x in validSections]
+        elements = [self.mergeChunks(x) for x in validSections]
         return elements
     
     def updateMatchers(self, matchers):
