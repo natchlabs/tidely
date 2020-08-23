@@ -16,9 +16,3 @@ def getWeather(locationNames, configurations):
 
     parseMethod = parse.processAPICallBulk if len(locationNames) > 1 else parse.processAPICall
     return parseMethod(r['data'], locationNames, configurations)
-
-# example call
-walking = WeatherConfiguration('Walking', [ WeatherMatcher('FeelsLikeC', 12, 20), WeatherMatcher('precipMM', 0, 0) ])
-rainCollecting = WeatherConfiguration('Rain collecting', [ WeatherMatcher('FeelsLikeC', 0, 13), WeatherMatcher('precipMM', 0.01, 10) ])
-
-getWeather(['Orewa', 'Hatfields beach, Auckland'], [ walking, rainCollecting ])

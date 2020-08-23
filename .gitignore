@@ -9,6 +9,7 @@ public/Gemfile.lock
 # Python
 
 __pycache__/
+venv/
 .env
 
 # Request files
