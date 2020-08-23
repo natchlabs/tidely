@@ -9,6 +9,7 @@ This is achieved by having the user set a list of the activities they are intere
 ## Team
 
 [Peter Goedeke](https://github.com/PeterGoedeke/) - primary back-end developer.
+
 [Nicholas Bates](https://github.com/NicholasBatesNZ) - primary front-end developer.
 
 ## MVP
@@ -17,9 +18,9 @@ Tidely is currently in development as a minimum viable product (MVP). The [app b
 
 ## APIs used
 
-Weather information is provided by the [worldweatheronline marine api](https://www.worldweatheronline.com/developer/api/marine-weather-api.aspx).
+Weather information is provided by the [World Weather Online marine API](https://www.worldweatheronline.com/developer/api/marine-weather-api.aspx).
 
-Geocoding is provided by the [HERE Developer geocoding api](https://developer.here.com/documentation/geocoder/dev_guide/topics/what-is.html)
+Geocoding is provided by the [MapQuest Geocoding API](https://developer.mapquest.com/documentation/open/geocoding-api/)
 
 # App breakdown
 
