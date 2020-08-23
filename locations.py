@@ -1,12 +1,18 @@
-import grequests
+import concurrent.futures
+import requests
 
 from dotenv import load_dotenv
 load_dotenv()
 import os
 # add caching and error handling - currently only works if the geocoding is successful
+params = { 'key': os.environ.get('geocode-key'), 'thumbMaps': False }
 def geocode(names):
-    params = { 'key': os.environ.get('location-iq-key'), 'format': 'json', 'limit': 1 }
-    rs = grequests.map((grequests.get(os.environ.get('location-iq-url'), params={ **params, **{ 'q': name } }) for name in names))
+    def format(r):
+        return str(r['lat']) + ',' + str(r['lng']) if 'lat' in r and 'lng' in r else 'Undefined location'
 
-    # return [{ 'q': location['lat'] + ',' + location['lon'], 'name': location['display_name'] } for r in rs for location in r.json()]
-    return [location['lat'] + ',' + location['lon'] for r in rs for location in r.json()]
+    body = { 'locations': names }
+    r = requests.post(os.environ.get('geocode-url'), json=body, params=params).json()
+
+    return [format(result['locations'][0]['latLng']) for result in r['results']]
+
+
