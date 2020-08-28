@@ -42,9 +42,9 @@ class TideMatcher(WeatherMatcher):
         return False
     
     def tideSuitable(self, chunkTime, tide):
-        rightType = tide['tide_type'] == 'LOW' and self.aroundLow or tide['tide_type'] == 'HIGH' and not self.aroundLow
+        rightType = (tide['tide_type'] == 'LOW' and self.aroundLow) or (tide['tide_type'] == 'HIGH' and not self.aroundLow)
         difference = chunkTime - parser.parse(tide['tideTime'])
-        return rightType and abs(difference.total_seconds()) < self.berth * 60
+        return rightType and abs(difference.total_seconds()) % (24 * 3600) < self.berth * 60
 
 class WeatherConfiguration:
     """WeatherConfigurations represent a collection of WeatherMatchers for multi-attribute filtering
