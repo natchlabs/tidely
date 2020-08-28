@@ -69,9 +69,16 @@ class WeatherConfiguration:
     def mergeChunks(self, chunks):
         startTime = chunks[0]['time']
         endTime = startTime + datetime.timedelta(hours=len(chunks))
+
+        date = ('Today' if startTime.date() == datetime.date.today() else
+            'Tomorrow' if startTime.date() == datetime.date.today() + datetime.timedelta(days=1) else startTime.date().strftime('%A'))
+
         return {
-            'startTime': str(startTime),
-            'endTime': str(endTime),
+            'startTime12h': startTime.strftime('%I:%M%p'),
+            'startTime24h': startTime.strftime('%H:%M'),
+            'endTime12h': endTime.strftime('%I:%M%p'),
+            'endTime24h': endTime.strftime('%H:%M'),
+            'date': date,
             'activity': self.activity,
             'location': chunks[0]['location'],
             'weather': {
