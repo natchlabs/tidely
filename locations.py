@@ -1,4 +1,6 @@
 import requests
+from functools import partial
+import json
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -19,3 +21,10 @@ def geocode(names):
     r = requests.post(os.environ.get('geocode-url'), json=body, params=params).json()
 
     return [format(result['locations'][0]['latLng']) for result in r['results']]
+def distance(p1, p2):
+    return (p1['lat'] - p2['lat']) ** 2 + (p1['lng'] - p2['lng']) ** 2
+
+def nearbyLocations(p, points, n):
+    s = sorted(points, key=partial(distance, p))
+
+    return list(map(lambda l: l['name'], s[0:n]))

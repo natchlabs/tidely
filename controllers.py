@@ -6,7 +6,7 @@ import os
 
 import parse
 from filters import WeatherMatcher, WeatherConfiguration
-from geocode import geocode
+from locations import geocode
 
 def getWeather(locationNames, configurations):
     """Given a list of locations and a list of WeatherConfigurations, return activity recommendations
