@@ -1,9 +1,12 @@
 from flask import Flask
+from flask_cors import CORS, cross_origin
 
 import controllers
 from filters import WeatherConfiguration, WeatherMatcher
 
 app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 # example preset WeatherConfigurations for the user who is not logged in
 walking = WeatherConfiguration('Walking', [ WeatherMatcher('FeelsLikeC', 12, 20), WeatherMatcher('precipMM', 0, 0) ])
