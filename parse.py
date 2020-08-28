@@ -59,10 +59,10 @@ def parseResponse(responseRaw, locationName):
 # get the timezone so that date calculations can be done. This should later be replaced with the user's timezone for a given call
 LOCAL_TIMEZONE = datetime.datetime.now(datetime.timezone(datetime.timedelta(0))).astimezone().tzinfo
 
-def toDatetime(date, time):
-    """Convert the worldweatheronline time format into a python datetime object"""
+def hourlyToDatetime(date, time):
+    """Convert the worldweatheronline hourly time format into a python datetime object"""
     d = [int(a) for a in date.split('-')]
-    return datetime.datetime(*d, int(int(time) / 100), tzinfo=LOCAL_TIMEZONE)
+    return datetime.datetime(*d, int(int(time) / 100))
 
 def merge(a, b):
     return { **a, **b }
