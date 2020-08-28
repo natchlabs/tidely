@@ -11,6 +11,7 @@ public/Gemfile.lock
 __pycache__/
 venv/
 .env
+.flaskenv
 
 # Request files
 *.rest

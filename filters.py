@@ -70,15 +70,16 @@ class WeatherConfiguration:
         startTime = chunks[0]['time']
         endTime = startTime + datetime.timedelta(hours=len(chunks))
 
-        date = ('Today' if startTime.date() == datetime.date.today() else
-            'Tomorrow' if startTime.date() == datetime.date.today() + datetime.timedelta(days=1) else startTime.date().strftime('%A'))
+        startDate = self.getDay(startTime)
+        endDate = self.getDay(chunks[-1]['time'])
 
         return {
             'startTime12h': startTime.strftime('%I:%M%p'),
             'startTime24h': startTime.strftime('%H:%M'),
             'endTime12h': endTime.strftime('%I:%M%p'),
             'endTime24h': endTime.strftime('%H:%M'),
-            'date': date,
+            'startDate': startDate,
+            'endDate': endDate,
             'activity': self.activity,
             'location': chunks[0]['location'],
             'weather': {
@@ -86,6 +87,10 @@ class WeatherConfiguration:
                 'icon': chunks[0]['weatherIconUrl'][0]['value']
             }
         }
+
+    def getDay(self, day):
+        return ('Today' if day.date() == datetime.date.today() else
+            'Tomorrow' if day.date() == datetime.date.today() + datetime.timedelta(days=1) else day.date().strftime('%A'))
 
     def __call__(self, weatherChunks):
         validSections = [list(groups) for key, groups in it.groupby(weatherChunks, self.testChunk) if key]
