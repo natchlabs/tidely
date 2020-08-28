@@ -1,7 +1,11 @@
 import functools
 import itertools as it
 import datetime
-class WeatherMatcher:
+import parse
+from abc import ABC
+from dateutil import parser
+
+class WeatherMatcher(ABC):
     """WeatherMatchers filter through weather result based on a specific attribute
 
     Weather results are returned from the worldweatheronline API as hourly chunks. A WeatherMatcher
@@ -10,6 +14,13 @@ class WeatherMatcher:
     WeatherConfiguration to test chunks based on multiple attributes.
     """
 
+    def testChunk(self, weatherChunk):
+        """Takes a single weather chunk and determines whether it passes the filter or not"""
+
+    def __call__(self, weatherChunk):
+        return self.testChunk(weatherChunk)
+
+class BoundMatcher(WeatherMatcher):
     def __init__(self, prop, lower, upper):
         self.prop = prop
         self.lower = lower
@@ -18,12 +29,7 @@ class WeatherMatcher:
     def testChunk(self, weatherChunk):
         return self.lower <= float(weatherChunk[self.prop]) <= self.upper
 
-    def changeBounds(self, lower, upper):
-        self.lower = lower
-        self.upper = upper
 
-    def __call__(self, weatherChunk):
-        return self.testChunk(weatherChunk)
 class WeatherConfiguration:
     """WeatherConfigurations represent a collection of WeatherMatchers for multi-attribute filtering
 

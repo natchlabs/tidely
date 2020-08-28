@@ -51,8 +51,9 @@ def parseResponse(responseRaw, locationName):
     """
     def createMetadata(day, hourly):
         return {
-            'time': toDatetime(day['date'], hourly['time']),
-            'location': locationName
+            'time': hourlyToDatetime(day['date'], hourly['time']),
+            'location': locationName,
+            'dayWeather': { 'tides': day['tides'], 'astronomy': day['astronomy'] }
         }
     return [merge(hourly, createMetadata(day, hourly)) for day in responseRaw['weather'] for hourly in day['hourly']]
 # get the timezone so that date calculations can be done. This should later be replaced with the user's timezone for a given call
