@@ -1,0 +1,57 @@
+[
+    {
+        "name": "Orewa",
+        "lat": -36.586633,
+        "lng": 174.697493
+    },
+    {
+        "name": "Hatfields Beach",
+        "lat": -36.569517,
+        "lng": 174.694128
+    },
+    {
+        "name": "Waiwera",
+        "lat": -36.544083,
+        "lng": 174.704819
+    },
+    {
+        "name": "Army Bay",
+        "lat": -36.601632,
+        "lng": 174.799831
+    },
+    {
+        "name": "Matakatia",
+        "lat": -36.623360,
+        "lng": 174.778710
+    },
+    {
+        "name": "Mellons Bay",
+        "lat": -36.887071,
+        "lng": 174.932080
+    },
+    {
+        "name": "Beachlands",
+        "lat": -36.882672,
+        "lng": 175.001281
+    },
+    {
+        "name": "Ostend",
+        "lat": -36.799050,
+        "lng": 175.047109
+    },
+    {
+        "name": "Waiuku",
+        "lat": -37.245661,
+        "lng": 174.728327
+    },
+    {
+        "name": "Big Bay",
+        "lat": -37.044767,
+        "lng": 174.644317
+    },
+    {
+        "name": "Clarks Beach",
+        "lat": -37.140059,
+        "lng": 174.707517
+    }
+]
