@@ -26,15 +26,18 @@ title: dashboard
         }
     }
 
-    (async function() {
-        const response = await fetch('http://localhost:5000/')
+    navigator.geolocation.getCurrentPosition(async position => {
+        const [lat, lng] = [ position.coords.latitude, position.coords.longitude ]
+
+        const response = await fetch(`http://localhost:5000/${lat},${lng}`)
         const result = await response.json()
         const dataByActivity = new Map()
 
         processData(result, dataByActivity)
-    
+
         dataByActivity.forEach((value, key) => createActivityCards(key, value))
-    })()
+    })
+
 
     function createActivityCards(activity, details) {
         const activityCard = document.createElement('div')
