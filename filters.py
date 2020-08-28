@@ -75,8 +75,8 @@ class WeatherConfiguration:
             'activity': self.activity,
             'location': chunks[0]['location'],
             'weather': {
-                'desc': chunks[0]['weatherDesc'],
-                'icon': chunks[0]['weatherIconUrl']
+                'desc': chunks[0]['weatherDesc'][0]['value'],
+                'icon': chunks[0]['weatherIconUrl'][0]['value']
             }
         }
 
