@@ -79,13 +79,13 @@ title: dashboard
 
             const weatherIcon = document.createElement('img')
             weatherIcon.classList = 'uk-align-right'
-            weatherIcon.src = activity.weather.icon[0].value
+            weatherIcon.src = activity.weather.icon
             localHeading.appendChild(weatherIcon)
 
             body.appendChild(localHeading)
 
             const weatherDescription = document.createElement('p')
-            weatherDescription.innerText = activity.weather.desc[0].value
+            weatherDescription.innerText = activity.weather.desc
 
             body.appendChild(weatherDescription)
             detailsCard.appendChild(body)
