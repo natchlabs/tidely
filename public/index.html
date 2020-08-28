@@ -3,4 +3,107 @@ layout: page
 title: dashboard
 ---
 
-Dashboard content
+<script>
+    function processData(data, map) {
+        for (let i = 0; i < data.chunks.length; i++) {
+            const activityData = data.chunks[i]
+            const activity = activityData.activity
+            const info = {
+                startTime: activityData.startTime,
+                endTime: activityData.endTime,
+                location: activityData.location,
+                weather: activityData.weather
+            }
+
+            let value
+            if (map.has(activity)) {
+                value = map.get(activity)
+                value.push(info)
+            } else {
+                value = [info]
+            }
+            map.set(activity, value)
+        }
+    }
+
+    (async function() {
+        const response = await fetch('http://localhost:5000/')
+        const result = await response.json()
+        const dataByActivity = new Map()
+
+        processData(result, dataByActivity)
+    
+        dataByActivity.forEach((value, key) => createActivityCards(key, value))
+    })()
+
+    function createActivityCards(activity, details) {
+        const activityCard = document.createElement('div')
+        activityCard.className = 'uk-card-large uk-card-default uk-margin-large-bottom'
+
+        const header = document.createElement('div')
+        header.classList = 'uk-card-header uk-padding-remove-top uk-padding-remove-bottom'
+
+        const heading = document.createElement('h3')
+        heading.className = 'uk-card-title'
+        heading.innerText = activity
+
+        header.appendChild(heading)
+        activityCard.appendChild(header)
+
+        const body = document.createElement('div')
+        body.classList = 'uk-card-body uk-padding-remove'
+
+        const detailsCardHolder = document.createElement('div')
+        detailsCardHolder.classList = 'uk-flex'
+        detailsCardHolder.style.overflowX = 'scroll'
+
+        details.forEach(activity => {
+            const detailsCard = document.createElement('div')
+            detailsCard.classList = 'uk-card-small uk-card-secondary uk-card-hover uk-margin-left'
+
+            const header = document.createElement('div')
+            header.classList = 'uk-card-header uk-padding-remove-top uk-padding-remove-bottom'
+
+            const heading = document.createElement('h3')
+            heading.classList = 'uk-card-title'
+            heading.innerText = activity.startTime + '-' + activity.endTime
+
+            header.appendChild(heading)
+            detailsCard.appendChild(header)
+
+            const body = document.createElement('div')
+            body.classList = 'uk-card-body uk-padding-remove'
+
+            const localHeading = document.createElement('h4')
+            localHeading.innerText = activity.location
+
+            const weatherIcon = document.createElement('img')
+            weatherIcon.classList = 'uk-align-right'
+            weatherIcon.src = activity.weather.icon[0].value
+            localHeading.appendChild(weatherIcon)
+
+            body.appendChild(localHeading)
+
+            const weatherDescription = document.createElement('p')
+            weatherDescription.innerText = activity.weather.desc[0].value
+
+            body.appendChild(weatherDescription)
+            detailsCard.appendChild(body)
+            detailsCardHolder.appendChild(detailsCard)
+        })
+
+        body.appendChild(detailsCardHolder)
+        activityCard.appendChild(body)
+
+        document.getElementById('activityCardHolder').insertBefore(activityCard, document.getElementById('newActivity'))
+    }
+</script>
+
+<div id="activityCardHolder" class="uk-flex uk-flex-column uk-margin-xlarge-left uk-margin-xlarge-right uk-margin-top">
+    <div id="newActivity" class="uk-card-large uk-card-primary uk-card-hover uk-margin-large-bottom">
+        <div class="uk-card-body">
+            +
+        </div>
+    </div>
+</div>
+</div>
