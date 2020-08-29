@@ -5,25 +5,15 @@ title: dashboard
 
 <script>
     function processData(data, map) {
-        for (let i = 0; i < data.chunks.length; i++) {
-            const activityData = data.chunks[i]
+        data.chunks.forEach(activityData => {
             const activity = activityData.activity
-            const info = {
-                startTime: activityData.startTime,
-                endTime: activityData.endTime,
-                location: activityData.location,
-                weather: activityData.weather
-            }
 
-            let value
             if (map.has(activity)) {
-                value = map.get(activity)
-                value.push(info)
+                map.get(activity).push(activityData)
             } else {
-                value = [info]
+                map.set(activity, [activityData])
             }
-            map.set(activity, value)
-        }
+        })
     }
 
     navigator.geolocation.getCurrentPosition(async position => {
@@ -61,15 +51,17 @@ title: dashboard
         detailsCardHolder.style.overflowX = 'scroll'
 
         details.forEach(activity => {
+            console.log(activity)
             const detailsCard = document.createElement('div')
             detailsCard.classList = 'uk-card-small uk-card-secondary uk-card-hover uk-margin-left'
 
             const header = document.createElement('div')
-            header.classList = 'uk-card-header uk-padding-remove-top uk-padding-remove-bottom'
+            header.classList = 'uk-card-header uk-padding-remove uk-text-center'
+            header.style.width = '16em'
 
             const heading = document.createElement('h3')
             heading.classList = 'uk-card-title'
-            heading.innerText = activity.startTime + '-' + activity.endTime
+            heading.innerHTML = `${activity.startDate}<br>${activity.startTime12h} - ${activity.endTime12h}`
 
             header.appendChild(heading)
             detailsCard.appendChild(header)
