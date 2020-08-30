@@ -17,4 +17,4 @@ rainCollecting = WeatherConfiguration('Rain collecting', [ BoundMatcher('FeelsLi
 def getNearbyRecommendations(lat, lng):
     lat, lng = float(lat), float(lng)
     locations = nearbyLocations({ 'lat': lat, 'lng': lng }, nzlocations, 5)
-    return { 'chunks': controllers.getWeather(locations, [ walking, rainCollecting ]) }
+    return { 'chunks': controllers.getWeatherForKnownLocations(locations, [ walking, rainCollecting ]) }
