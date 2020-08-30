@@ -64,6 +64,9 @@ class WeatherConfiguration:
         self.activity = activity
 
     def testChunk(self, weatherChunk):
+        if weatherChunk['time'] < datetime.datetime.now() - datetime.timedelta(hours=1):
+            return False
+
         return functools.reduce(lambda acc,cur: cur(weatherChunk) and acc, self.matchers, True)
     
     def mergeChunks(self, chunks):
@@ -94,6 +97,11 @@ class WeatherConfiguration:
 
     def __call__(self, weatherChunks):
         validSections = [list(groups) for key, groups in it.groupby(weatherChunks, self.testChunk) if key]
+
+        import json
+        with open('test.json', 'w') as f:
+            json.dump(validSections, f, default=str)
+
         elements = [self.mergeChunks(x) for x in validSections]
         return elements
     
