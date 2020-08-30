@@ -77,6 +77,7 @@ class WeatherConfiguration:
         endDate = self.getDay(chunks[-1]['time'])
 
         return {
+            'isoStart': startTime,
             'startTime12h': startTime.strftime('%I:%M%p'),
             'startTime24h': startTime.strftime('%H:%M'),
             'endTime12h': endTime.strftime('%I:%M%p'),

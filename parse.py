@@ -1,5 +1,5 @@
 import datetime
-import functools
+import heapq
 
 def handleAPICallBulk(responseBulk, locationNames, configurations):
     """Apply a set of WeatherConfigurations to a bulk API call and return information suitable for the end-user
@@ -14,11 +14,9 @@ def handleAPICallBulk(responseBulk, locationNames, configurations):
         return handleAPICall(responseBulk, locationNames[0], configurations)
 
     response = parseResponseBulk(responseBulk, locationNames)
-    def process(x):
-        return functools.reduce(lambda acc,cur: cur(x) + acc, configurations, [])
+        
     # process the response for each location and then flatten it
-    return [chunk for locationResponse in response for chunk in process(locationResponse)]
-
+    return list(heapq.merge(*(applyConfigurations(l, configurations) for l in response), key=lambda x: x['isoStart']))
 
 def handleAPICall(responseRaw, locationName, configurations):
     """Apply a set of WeatherConfigurations to a marine API call and return information suitable for the end-user
@@ -30,10 +28,12 @@ def handleAPICall(responseRaw, locationName, configurations):
     """
 
     response = parseResponse(responseRaw, locationName)
-    # using lists may be inefficient here
-    elements = functools.reduce(lambda acc,cur: cur(response) + acc, configurations, [])
+    elements = applyConfigurations(response, configurations)
+
     return elements
 
+def applyConfigurations(response, configurations):
+    return list(heapq.merge(*(c(response) for c in configurations), key=lambda x: x['isoStart']))
 
 def parseResponseBulk(responseBulk, locationNames):
     """Parse a response from the worldweatheronline bulk API into a format readable by WeatherConfiguration objects
