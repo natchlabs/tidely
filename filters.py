@@ -66,8 +66,7 @@ class WeatherConfiguration:
     def testChunk(self, weatherChunk):
         if weatherChunk['time'] < datetime.datetime.now() - datetime.timedelta(hours=1):
             return False
-
-        return functools.reduce(lambda acc,cur: cur(weatherChunk) and acc, self.matchers, True)
+        return all(m(weatherChunk) for m in self.matchers)
     
     def mergeChunks(self, chunks):
         startTime = chunks[0]['time']
