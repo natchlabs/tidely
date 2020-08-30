@@ -23,5 +23,4 @@ def getWeather(locationNames, configurations):
     r = requests.get(os.environ.get('weather-url'), params).json()
     # as the format for the worldweatheronline api is different if there is one location, the response handling method is chosen
     # note: this should be refactored so that the response handlers can make this decision themselves
-    handleMethod = parse.handleAPICallBulk if len(locationNames) > 1 else parse.handleAPICall
-    return handleMethod(r['data'], locationNames, configurations)
+    return parse.handleAPICallBulk(r['data'], [l['name'] for l in locations], configurations)

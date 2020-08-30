@@ -10,6 +10,9 @@ def handleAPICallBulk(responseBulk, locationNames, configurations):
     multiple locations into a list of activity recommendations for the end-user.
     """
 
+    if len(locationNames) == 1:
+        return handleAPICall(responseBulk, locationNames[0], configurations)
+
     response = parseResponseBulk(responseBulk, locationNames)
     def process(x):
         return functools.reduce(lambda acc,cur: cur(x) + acc, configurations, [])
