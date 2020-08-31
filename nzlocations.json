@@ -53,5 +53,35 @@
         "name": "Clarks Beach",
         "lat": -37.140059,
         "lng": 174.707517
+    },
+    {
+        "name": "Long Bay",
+        "lat": -36.682437,
+        "lng": 174.74953
+    },
+    {
+        "name": "Torbay",
+        "lat": -36.702659,
+        "lng": 174.752088
+    },
+    {
+        "name": "Browns Bay",
+        "lat": -36.713609,
+        "lng": 174.749879
+    },
+    {
+        "name": "Murrays Bay",
+        "lat": -36.732889,
+        "lng": 174.753654
+    },
+    {
+        "name": "Mairangi Bay",
+        "lat": -36.7385,
+        "lng": 174.7566
+    },
+    {
+        "name": "Rothesay Bay",
+        "lat": -36.721695,
+        "lng": 174.751858
     }
 ]
