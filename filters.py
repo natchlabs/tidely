@@ -46,6 +46,13 @@ class TideMatcher(WeatherMatcher):
         difference = chunkTime - parser.parse(tide['tideTime'])
         return rightType and abs(difference.total_seconds()) % (24 * 3600) < self.berth * 60
 
+class TimeMatcher(WeatherMatcher):
+    def __init__(self, earliest, latest):
+        self.earliest = earliest
+        self.latest = latest
+    
+    def testChunk(self, weatherChunk):
+        return earliest <= weatherChunk['time'].hour < latest
 class WeatherConfiguration:
     """WeatherConfigurations represent a collection of WeatherMatchers for multi-attribute filtering
 

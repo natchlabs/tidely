@@ -59,8 +59,6 @@ def parseResponse(responseRaw, locationName):
             'dayWeather': { 'tides': day['tides'], 'astronomy': day['astronomy'] }
         }
     return [merge(hourly, createMetadata(day, hourly)) for day in responseRaw['weather'] for hourly in day['hourly']]
-# get the timezone so that date calculations can be done. This should later be replaced with the user's timezone for a given call
-LOCAL_TIMEZONE = datetime.datetime.now(datetime.timezone(datetime.timedelta(0))).astimezone().tzinfo
 
 def hourlyToDatetime(date, time):
     """Convert the worldweatheronline hourly time format into a python datetime object"""
