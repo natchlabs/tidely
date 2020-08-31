@@ -50,6 +50,7 @@ function createActivityCard(activity) {
 function createDetailsCard(chunk) {
     const detailsCard = document.createElement('div')
     detailsCard.classList = 'uk-card-small uk-card-secondary uk-card-hover uk-margin-left'
+    detailsCard.style.marginTop = '5px'
 
     const header = document.createElement('div')
     header.classList = 'uk-card-header uk-padding-remove uk-text-center'
@@ -64,6 +65,7 @@ function createDetailsCard(chunk) {
 
     const body = document.createElement('div')
     body.classList = 'uk-card-body uk-padding-remove'
+    body.style.marginLeft = '8px'
 
     const localHeading = document.createElement('h4')
     localHeading.innerText = chunk.location
