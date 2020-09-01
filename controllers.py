@@ -1,10 +1,8 @@
-import pycurl
-from io import BytesIO
+import requests
 
 from dotenv import load_dotenv
 load_dotenv()
 import os
-import json
 
 import parse
 from filters import WeatherMatcher, WeatherConfiguration
@@ -26,16 +24,7 @@ def getWeatherForKnownLocations(locations, configurations):
     """ Given a list of location names and their coordinates, return activity recommendations"""
 
     queryString = ';'.join(str(l['lat']) + ',' + str(l['lng']) for l in locations)
-    params = f"?q={queryString}&format=json&key={os.environ.get('weather-key')}&tide=yes"
+    params = { 'q': queryString, 'format': 'json', 'key': os.environ.get('weather-key'), 'tide': 'yes' }
 
-    buffer = BytesIO()
-    c = pycurl.Curl()
-    c.setopt(c.URL, 'http://api.worldweatheronline.com/premium/v1/marine.ashx' + params)
-    c.setopt(c.WRITEDATA, buffer)
-    c.perform()
-    c.close()
-
-    body = buffer.getvalue()
-    r = json.loads(body)
-    
+    r = requests.get(os.environ.get('weather-url'), params).json()
     return parse.handleAPICallBulk(r['data'], [l['name'] for l in locations], configurations)
