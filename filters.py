@@ -72,15 +72,17 @@ class WeatherConfiguration:
 
     def testChunk(self, weatherChunk):
         if weatherChunk['time'] < datetime.datetime.now() - datetime.timedelta(hours=1):
-            return False
-        return all(m(weatherChunk) for m in self.matchers)
+            return (False, None)
+        matched = all(m(weatherChunk) for m in self.matchers)
+        if matched:
+            return (True, weatherChunk['time'].day)
+        return (False, None)
     
     def mergeChunks(self, chunks):
         startTime = chunks[0]['time']
         endTime = startTime + datetime.timedelta(hours=len(chunks))
 
         startDate = self.getDay(startTime)
-        endDate = self.getDay(chunks[-1]['time'])
 
         return {
             'isoStart': startTime,
@@ -88,8 +90,7 @@ class WeatherConfiguration:
             'startTime24h': startTime.strftime('%H:%M'),
             'endTime12h': endTime.strftime('%I:%M%p'),
             'endTime24h': endTime.strftime('%H:%M'),
-            'startDate': startDate,
-            'endDate': endDate,
+            'date': startDate,
             'activity': self.activity,
             'location': chunks[0]['location'],
             'weather': {
@@ -103,7 +104,7 @@ class WeatherConfiguration:
             'Tomorrow' if day.date() == datetime.date.today() + datetime.timedelta(days=1) else day.date().strftime('%A'))
 
     def __call__(self, weatherChunks):
-        validSections = [list(groups) for key, groups in it.groupby(weatherChunks, self.testChunk) if key]
+        validSections = [list(groups) for key, groups in it.groupby(weatherChunks, self.testChunk) if key[0]]
 
         import json
         with open('test.json', 'w') as f:
