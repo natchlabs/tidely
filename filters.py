@@ -5,6 +5,10 @@ import parse
 from abc import ABC
 from dateutil import parser
 
+from dotenv import load_dotenv
+load_dotenv()
+import os
+
 class WeatherMatcher(ABC):
     """WeatherMatchers filter through weather result based on a specific attribute
 
@@ -52,7 +56,8 @@ class TimeMatcher(WeatherMatcher):
         self.latest = latest
     
     def testChunk(self, weatherChunk):
-        return earliest <= weatherChunk['time'].hour < latest
+        return self.earliest <= weatherChunk['time'].hour < self.latest
+
 class WeatherConfiguration:
     """WeatherConfigurations represent a collection of WeatherMatchers for multi-attribute filtering
 
@@ -83,6 +88,8 @@ class WeatherConfiguration:
         endTime = startTime + datetime.timedelta(hours=len(chunks))
 
         startDate = self.getDay(startTime)
+        timePeriod = 'day' # add proper time period checking
+        icon = os.environ.get('firebase-url') + timePeriod + '%2F' + chunks[0]['weatherCode'] + '.png' + os.environ.get('firebase-params')
 
         return {
             'isoStart': startTime,
@@ -95,7 +102,7 @@ class WeatherConfiguration:
             'location': chunks[0]['location'],
             'weather': {
                 'desc': chunks[0]['weatherDesc'][0]['value'],
-                'icon': chunks[0]['weatherIconUrl'][0]['value']
+                'icon': icon
             }
         }
 
