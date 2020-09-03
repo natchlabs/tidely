@@ -88,7 +88,10 @@ class WeatherConfiguration:
         endTime = startTime + datetime.timedelta(hours=len(chunks))
 
         startDate = self.getDay(startTime)
-        timePeriod = 'day' # add proper time period checking
+
+        astronomy = chunks[0]['dayWeather']['astronomy']
+        day = parser.parse(astronomy[0]['sunrise']).hour <= chunks[0]['time'].hour < parser.parse(astronomy[0]['sunset']).hour
+        timePeriod = 'day' if day else 'night'
         icon = os.environ.get('firebase-url') + timePeriod + '%2F' + chunks[0]['weatherCode'] + '.png' + os.environ.get('firebase-params')
 
         return {
@@ -112,10 +115,6 @@ class WeatherConfiguration:
 
     def __call__(self, weatherChunks):
         validSections = [list(groups) for key, groups in it.groupby(weatherChunks, self.testChunk) if key[0]]
-
-        import json
-        with open('test.json', 'w') as f:
-            json.dump(validSections, f, default=str)
 
         elements = [self.mergeChunks(x) for x in validSections]
         return elements
