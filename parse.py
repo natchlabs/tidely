@@ -16,7 +16,10 @@ def handleAPICallBulk(responseBulk, locationNames, configurations):
     response = parseResponseBulk(responseBulk, locationNames)
         
     # process the response for each location and then flatten it
-    return list(heapq.merge(*(applyConfigurations(l, configurations) for l in response), key=lambda x: x['isoStart']))
+    output = list(heapq.merge(*(applyConfigurations(l, configurations) for l in response), key=lambda x: x['isoStart']))
+    for c in configurations: c.reset()
+
+    return output
 
 def handleAPICall(responseRaw, locationName, configurations):
     """Apply a set of WeatherConfigurations to a marine API call and return information suitable for the end-user

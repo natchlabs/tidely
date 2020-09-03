@@ -74,6 +74,7 @@ class WeatherConfiguration:
     def __init__(self, activity, matchers):
         self.matchers = matchers
         self.activity = activity
+        self.currentlyBuilding = {}
 
     def testChunk(self, weatherChunk):
         if weatherChunk['time'] < datetime.datetime.now() - datetime.timedelta(hours=1):
@@ -84,10 +85,11 @@ class WeatherConfiguration:
         return (False, None)
     
     def mergeChunks(self, chunks):
+        # this function should be broken up into smaller functions
+
         startTime = chunks[0]['time']
         endTime = startTime + datetime.timedelta(hours=len(chunks))
-
-        startDate = self.getDay(startTime)
+        date = self.getDay(startTime)
 
         astronomy = chunks[0]['dayWeather']['astronomy']
         day = parser.parse(astronomy[0]['sunrise']).hour <= chunks[0]['time'].hour < parser.parse(astronomy[0]['sunset']).hour
@@ -100,9 +102,9 @@ class WeatherConfiguration:
             'startTime24h': startTime.strftime('%H:%M'),
             'endTime12h': endTime.strftime('%I:%M%p'),
             'endTime24h': endTime.strftime('%H:%M'),
-            'date': startDate,
+            'date': date,
             'activity': self.activity,
-            'location': chunks[0]['location'],
+            'locations': [chunks[0]['location']],
             'weather': {
                 'desc': chunks[0]['weatherDesc'][0]['value'],
                 'icon': icon
@@ -116,8 +118,22 @@ class WeatherConfiguration:
     def __call__(self, weatherChunks):
         validSections = [list(groups) for key, groups in it.groupby(weatherChunks, self.testChunk) if key[0]]
 
-        elements = [self.mergeChunks(x) for x in validSections]
-        return elements
+        output = []
+        for section in validSections:
+            from pprint import pprint
+            pprint(section[0]['time'])
+            timeframe = (section[0]['time'], len(section))
+            if timeframe in self.currentlyBuilding:
+                self.currentlyBuilding[timeframe]['locations'].append(section[0]['location'])
+                continue
+            result = self.mergeChunks(section)
+            output.append(result)
+            self.currentlyBuilding[timeframe] = result
+
+        return output
+    
+    def reset(self):
+        self.currentlyBuilding = {}
     
     def updateMatchers(self, matchers):
         self.matchers = matchers
