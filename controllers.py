@@ -24,7 +24,7 @@ def getWeatherForKnownLocations(locations, configurations):
     """ Given a list of location names and their coordinates, return activity recommendations"""
 
     queryString = ';'.join(str(l['lat']) + ',' + str(l['lng']) for l in locations)
-    params = { 'q': queryString, 'format': 'json', 'key': os.environ.get('weather-key'), 'tide': 'yes' }
+    params = { 'q': queryString, 'format': 'json', 'key': os.environ.get('weather-key'), 'tide': 'yes', 'tp': '1' }
 
     r = requests.get(os.environ.get('weather-url'), params).json()
     return parse.handleAPICallBulk(r['data'], [l['name'] for l in locations], configurations)

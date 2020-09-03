@@ -85,8 +85,6 @@ class WeatherConfiguration:
         return (False, None)
     
     def mergeChunks(self, chunks):
-        # this function should be broken up into smaller functions
-
         startTime = chunks[0]['time']
         endTime = startTime + datetime.timedelta(hours=len(chunks))
         date = self.getDay(startTime)
