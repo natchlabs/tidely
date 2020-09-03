@@ -18,3 +18,6 @@ def getNearbyRecommendations(lat, lng):
     lat, lng = float(lat), float(lng)
     locations = nearbyLocations({ 'lat': lat, 'lng': lng }, nzlocations, 5)
     return { 'chunks': controllers.getWeatherForKnownLocations(locations, [ walking, rainCollecting ]) }
+
+if __name__ == "__main__":
+    app.run()

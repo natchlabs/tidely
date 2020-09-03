@@ -118,8 +118,6 @@ class WeatherConfiguration:
 
         output = []
         for section in validSections:
-            from pprint import pprint
-            pprint(section[0]['time'])
             timeframe = (section[0]['time'], len(section))
             if timeframe in self.currentlyBuilding:
                 self.currentlyBuilding[timeframe]['locations'].append(section[0]['location'])
