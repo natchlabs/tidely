@@ -58,7 +58,7 @@ function createDetailsCard(chunk) {
 
     const heading = document.createElement('h3')
     heading.classList = 'uk-card-title'
-    heading.innerHTML = `${chunk.startDate}<br>${chunk.startTime12h} - ${chunk.endTime12h}`
+    heading.innerHTML = `${chunk.date}<br>${chunk.startTime12h} - ${chunk.endTime12h}`
 
     header.appendChild(heading)
     detailsCard.appendChild(header)
@@ -71,8 +71,9 @@ function createDetailsCard(chunk) {
     localHeading.innerText = chunk.location
 
     const weatherIcon = document.createElement('img')
-    weatherIcon.classList = 'uk-align-right'
+    weatherIcon.classList = 'uk-align-right uk-margin-remove'
     weatherIcon.src = chunk.weather.icon
+    weatherIcon.style.width = '100px'
     localHeading.appendChild(weatherIcon)
 
     body.appendChild(localHeading)
