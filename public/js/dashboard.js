@@ -69,10 +69,12 @@ function createDetailsCard(chunk) {
 
     const localHeading = document.createElement('h4')
     localHeading.innerText = chunk.locations[0]
-    const moreLocations = document.createElement('span')
-    moreLocations.innerText = ' +' + (chunk.locations.length - 1)
-    chunk.locations.forEach(location => moreLocations.title += location + '\n')
-    localHeading.appendChild(moreLocations)
+    if (chunk.locations.length > 1) {
+        const moreLocations = document.createElement('span')
+        moreLocations.innerText = ' +' + (chunk.locations.length - 1)
+        chunk.locations.forEach(location => moreLocations.title += location + '\n')
+        localHeading.appendChild(moreLocations)
+    }
 
     const weatherIcon = document.createElement('img')
     weatherIcon.classList = 'uk-align-right uk-margin-remove'
