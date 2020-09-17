@@ -47,7 +47,7 @@ def parseResponseBulk(responseBulk, locationNames):
     activity recommendations for a set of locations for a user.
     """
     
-    return [parseResponse(response[0], response[1]) for response in zip(responseBulk['area'], locationNames)]
+    return [parseResponse(response[0], response[1]) for response in zip(responseBulk, locationNames)]
 
 def parseResponse(responseRaw, locationName):
     """Parses the response from the worldweatheronline marine API into a format readable by WeatherConfiguration objects
@@ -61,6 +61,9 @@ def parseResponse(responseRaw, locationName):
             'location': locationName,
             'dayWeather': { 'tides': day['tides'], 'astronomy': day['astronomy'] }
         }
+    from pprint import pprint
+    if not 'weather' in responseRaw:
+        pprint(responseRaw)
     return [merge(hourly, createMetadata(day, hourly)) for day in responseRaw['weather'] for hourly in day['hourly']]
 
 def hourlyToDatetime(date, time):
