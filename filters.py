@@ -50,6 +50,13 @@ class TideMatcher(WeatherMatcher):
         difference = chunkTime - parser.parse(tide['tideTime'])
         return rightType and abs(difference.total_seconds()) % (24 * 3600) < self.berth * 60
 
+class WeatherCodeMatcher(WeatherMatcher):
+    def __init__(self, codes):
+        self.codes = codes
+    
+    def testChunk(self, weatherChunk):
+        return int(weatherChunk['weatherCode']) in self.codes
+
 class TimeMatcher(WeatherMatcher):
     def __init__(self, earliest, latest):
         self.earliest = earliest
@@ -89,6 +96,7 @@ class WeatherConfiguration:
         endTime = startTime + datetime.timedelta(hours=len(chunks))
         date = self.getDay(startTime)
 
+        # generate the various pieces of data, nicely formatted, as needed by the user
         astronomy = chunks[0]['dayWeather']['astronomy']
         day = parser.parse(astronomy[0]['sunrise']).hour <= chunks[0]['time'].hour < parser.parse(astronomy[0]['sunset']).hour
         timePeriod = 'day' if day else 'night'
@@ -114,6 +122,7 @@ class WeatherConfiguration:
             'Tomorrow' if day.date() == datetime.date.today() + datetime.timedelta(days=1) else day.date().strftime('%A'))
 
     def __call__(self, weatherChunks):
+        # group the weather chunks based on whether the passed the tests and whether they are on the same day
         validSections = [list(groups) for key, groups in it.groupby(weatherChunks, self.testChunk) if key[0]]
 
         output = []
