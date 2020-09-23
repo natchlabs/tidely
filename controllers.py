@@ -19,4 +19,4 @@ def getWeatherForKnownLocations(locations, configurations):
     """ Given a list of location names and their coordinates, return activity recommendations"""
 
     r = weather.requestWeatherInformation(locations)
-    return parse.handleAPICallBulk(r, [l['name'] for l in locations], configurations)
+    return parse.handleAPICall(r, [l['name'] for l in locations], configurations)
