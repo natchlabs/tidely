@@ -1,15 +1,51 @@
 <!DOCTYPE html>
-<title>Test</title>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <title>Test</title>
+</head>
+
+<style>
+    .orb {
+        width: 30px;
+        height: 30px;
+        border-radius: 15px;
+        display: inline-block;
+        text-align: center;
+        line-height: 30px;
+        font-size: 16px;
+    }
+</style>
 
 <body>
-    <table class="app">
+    <table id="app">
+
         <tr>
-            <td>{{ message }}</td>
+            <th v-for="day in days">{{ day }}</th>
+        </tr>
+        <tr v-for="day in grid">
+            <td v-for="hour in day" style="border: solid black 1px">
+                <div class="orb" v-for="location in hour" v-bind:style="{backgroundColor: locations[location]}">{{ location[0] }}</div>
+            </td>
         </tr>
     </table>
     
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script>
+        function convert(str) {
+            let total = 0
+            for (let i = 0; i < str.length; i++) {
+                total += str[i].charCodeAt(0) * i
+            }
+            return total
+        }
+        function selectColor(number) {
+            const hue = number * 137.508; // use golden angle approximation
+            return `hsl(${hue},50%,75%)`;
+        }
+
         const grids = {}
         navigator.geolocation.getCurrentPosition(async position => {
             const [lat, lng] = [position.coords.latitude, position.coords.longitude]
@@ -37,29 +73,29 @@
             for (const chunk of result.chunks) {
                 const grid = grids[chunk.activity]
                 const row = chunk.dateFromTodayInt
-
                 
                 const cols = [...Array(chunk.endTimeInt - chunk.startTimeInt + 1).keys()]
-                
-                if(chunk.startTimeInt > 12 || chunk.endTimeInt > 12) {
-                    console.log(chunk)
-                    console.log(cols, row)
-                }
 
                 for (let col = chunk.startTimeInt; col < chunk.endTimeInt; col++) {
-                    console.log(col)
-                    // grid[col - result.bounds[chunk.activity][0]][row].push(chunk)
                     const set = grid[col - result.bounds[chunk.activity][0]][row]
                     chunk.locations.forEach(l => set.add(l))
                 }
-            }  
+            }
+            const app = new Vue({
+                el: '#app',
+                data: {
+                    grid: grids.Walking,
+                    locations: result.locations.reduce((acc, cur) => {
+                        acc[cur] = selectColor(convert(cur))
+                        return acc
+                    }, {}),
+                    days: result.days
+                }
+            })
         })
 
-        var app = new Vue({
-            el: '.app',
-            data: {
-                message: 'test'
-            }
-        })
     </script>
+
+
 </body>
+</html>
