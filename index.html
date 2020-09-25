@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<title>Test</title>
+
+<body>
+    <table class="app">
+        <tr>
+            <td>{{ message }}</td>
+        </tr>
+    </table>
+    
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+        const grids = {}
+        navigator.geolocation.getCurrentPosition(async position => {
+            const [lat, lng] = [position.coords.latitude, position.coords.longitude]
+    
+            const response = await fetch(`http://localhost:5000/${lat},${lng}`)
+            const result = await response.json()
+            
+            for (const activity in result.bounds) {
+                const [lower, upper] = [ result.bounds[activity][0], result.bounds[activity][1] ]
+                grids[activity] = (function() {
+                    const arr = []
+                    for (let i = 0; i <= upper - lower; i++) {
+                        arr.push((function() {
+                            const a = []
+                            for (let i = 0; i < 7; i++) {
+                                a.push(new Set())
+                            }
+                            return a
+                        })())
+                    }
+                    return arr
+                })()
+            }
+
+            for (const chunk of result.chunks) {
+                const grid = grids[chunk.activity]
+                const row = chunk.dateFromTodayInt
+
+                
+                const cols = [...Array(chunk.endTimeInt - chunk.startTimeInt + 1).keys()]
+                
+                if(chunk.startTimeInt > 12 || chunk.endTimeInt > 12) {
+                    console.log(chunk)
+                    console.log(cols, row)
+                }
+
+                for (let col = chunk.startTimeInt; col < chunk.endTimeInt; col++) {
+                    console.log(col)
+                    // grid[col - result.bounds[chunk.activity][0]][row].push(chunk)
+                    const set = grid[col - result.bounds[chunk.activity][0]][row]
+                    chunk.locations.forEach(l => set.add(l))
+                }
+            }  
+        })
+
+        var app = new Vue({
+            el: '.app',
+            data: {
+                message: 'test'
+            }
+        })
+    </script>
+</body>
