@@ -34,6 +34,30 @@
     
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script>
+        Set.prototype.difference = function(otherSet) {
+            // creating new set to store difference 
+            var differenceSet = new Set(); 
+        
+            // iterate over the values 
+            for(var elem of this) { 
+                // if the value[i] is not present  
+                // in otherSet add to the differenceSet 
+                if(!otherSet.has(elem)) 
+                    differenceSet.add(elem); 
+            } 
+        
+            // returns values of differenceSet 
+            return differenceSet; 
+        }
+        function isSuperset(set, subset) {
+            for (let elem of subset) {
+                if (!set.has(elem)) {
+                    return false
+                }
+            }
+            return true
+        }
+
         function convert(str) {
             let total = 0
             for (let i = 0; i < str.length; i++) {
