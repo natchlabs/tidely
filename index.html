@@ -105,6 +105,44 @@
                     chunk.locations.forEach(l => set.add(l))
                 }
             }
+
+            function findLocationGroups(arr, categories) {
+                const result = branch(arr, 0, categories)
+
+                const flattened = []
+                function unwrap(arr) {
+                    arr.forEach(elem =>{
+                        if (elem instanceof Array) {
+                            return unwrap(elem)
+                        }
+                        flattened.push(elem)
+                    })
+                }
+                unwrap(result)
+                return flattened
+            }
+
+            function branch(arr, i, equivalent) {
+                if (i == arr.length || equivalent.size == 1) {
+                    return equivalent
+                }
+    
+                const examine = arr[i].locations.filter(l => equivalent.has(l))
+                if (examine.length == equivalent.size || examine.length == 0) {
+                    return branch(arr, ++i, equivalent)
+                }
+    
+                const present = new Set()
+                examine.forEach(l => present.add(l))
+                const absent = equivalent.difference(present)
+    
+                return [ branch(arr, ++i, present), branch(arr, ++i, absent) ]
+            }
+    
+            const set = new Set()
+            result.locations.forEach(l => set.add(l))
+            const groups = findLocationGroups(result.chunks, set)
+
             const app = new Vue({
                 el: '#app',
                 data: {
