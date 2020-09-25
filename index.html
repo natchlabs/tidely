@@ -21,13 +21,12 @@
 
 <body>
     <table id="app">
-
         <tr>
             <th v-for="day in days">{{ day }}</th>
         </tr>
-        <tr v-for="day in grid">
+        <tr v-for="day in groupsOnGrid">
             <td v-for="hour in day" style="border: solid black 1px">
-                <div class="orb" v-for="location in hour" v-bind:style="{backgroundColor: locations[location]}">{{ location[0] }}</div>
+                <div class="orb" v-for="group in hour" v-bind:style="{backgroundColor: groupToColor(group)}">{{ Array.from(group)[0][0] }}</div>
             </td>
         </tr>
     </table>
@@ -151,11 +150,29 @@
                         acc[cur] = selectColor(convert(cur))
                         return acc
                     }, {}),
-                    days: result.days
+                    days: result.days,
+                    locationGroups: groups
+                },
+                methods: {
+                    groupToColor: function(set) {
+                       return selectColor(convert(Array.from(set).join(', ')))
+                    }
+                },
+                computed: {
+                    groupsOnGrid: function() {
+                        return this.grid.map(row => row.map(locations => {
+                            const groups = []
+                            this.locationGroups.forEach(group => {
+                                if (isSuperset(locations, group)) {
+                                    groups.push(group)
+                                }
+                            })
+                            return groups
+                        }))
+                    }
                 }
             })
         })
-
     </script>
 
 
