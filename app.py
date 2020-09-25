@@ -5,6 +5,8 @@ import controllers
 import filters
 from locations import nearbyLocations, nzlocations
 import codes
+import calendar
+from datetime import datetime
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -20,7 +22,13 @@ def getNearbyRecommendations(lat, lng):
     locations = nearbyLocations({ 'lat': lat, 'lng': lng }, nzlocations, 5)
 
     configurations = [ rainCollecting, walking ]
-    return { 'chunks': controllers.getWeatherForKnownLocations(locations, configurations), 'bounds': filters.getBounds(configurations) }
+    return {
+        'chunks': controllers.getWeatherForKnownLocations(locations, configurations),
+        'bounds': filters.getBounds(configurations),
+        'activities': [configuration.activity for configuration in configurations],
+        'locations': [location['name'] for location in locations],
+        'days': ['Today', 'Tomorrow'] + [ calendar.day_name[day] for day in calendar.Calendar(datetime.now().day).iterweekdays()][2:]
+    }
 
 if __name__ == "__main__":
     app.run()
