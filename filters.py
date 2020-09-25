@@ -146,3 +146,13 @@ class WeatherConfiguration:
     
     def updateMatchers(self, matchers):
         self.matchers = matchers
+
+def getBounds(configurations):
+    bounds = {}
+
+    for configuration in configurations:
+        for matcher in configuration.matchers:
+            if isinstance(matcher, TimeMatcher):
+                bounds[configuration.activity] = matcher.earliest, matcher.latest
+                break
+    return bounds
