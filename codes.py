@@ -1,3 +1,5 @@
+# worldweatheronline codes for different weather conditions are arranged into sets below
+# such that each set represents a rough category of weather descriptions
 _sun = { 113, 116 }
 _overcast = { 119, 122, 143, 248, 260 }
 
