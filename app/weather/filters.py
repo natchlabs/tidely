@@ -1,7 +1,7 @@
 import functools
 import itertools as it
 import datetime
-import parse
+import app.weather.parse as parse
 from abc import ABC
 from dateutil import parser
 

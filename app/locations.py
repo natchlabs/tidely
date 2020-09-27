@@ -29,5 +29,5 @@ def nearbyLocations(p, points, n):
 
     return list(s[0:n])
 
-with open('nzlocations.json') as f:
+with open('app//static/nzlocations.json') as f:
     nzlocations = json.load(f)

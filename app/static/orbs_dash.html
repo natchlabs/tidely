@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <title>Test</title>
+</head>
+
+<style>
+    .orb {
+        width: 30px;
+        height: 30px;
+        border-radius: 15px;
+        display: inline-block;
+        text-align: center;
+        line-height: 30px;
+        font-size: 16px;
+    }
+</style>
+
+<body>
+    <table id="app">
+        <tr>
+            <th v-for="day in days">{{ day }}</th>
+        </tr>
+        <tr v-for="day in groupsOnGrid">
+            <td v-for="hour in day" style="border: solid black 1px">
+                <div class="orb" v-for="group in hour" v-bind:style="{backgroundColor: groupToColor(group)}">{{ Array.from(group)[0][0] }}</div>
+            </td>
+        </tr>
+    </table>
+    
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="orbs_dash.js"></script>
+
+
+</body>
+</html>

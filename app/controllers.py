@@ -1,7 +1,7 @@
-import parse
-from filters import WeatherMatcher, WeatherConfiguration
-from locations import geocode
-import weather
+import app.weather.parse as parse
+from app.weather.filters import WeatherMatcher, WeatherConfiguration
+from app.locations import geocode
+import app.weather.cache as cache
 
 def getWeatherForUnknownLocations(locationNames, configurations):
     """Given a list of location names and a list of WeatherConfigurations, return activity recommendations
@@ -18,5 +18,5 @@ def getWeatherForUnknownLocations(locationNames, configurations):
 def getWeatherForKnownLocations(locations, configurations):
     """ Given a list of location names and their coordinates, return activity recommendations"""
 
-    r = weather.requestWeatherInformation(locations)
+    r = cache.requestWeatherInformation(locations)
     return parse.handleAPICall(r, [l['name'] for l in locations], configurations)

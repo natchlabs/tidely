@@ -1,10 +1,10 @@
 from flask import Flask
 from flask_cors import CORS, cross_origin
 
-import controllers
-import filters
-from locations import nearbyLocations, nzlocations
-import codes
+import app.controllers as controllers
+import app.weather.filters as filters
+from app.locations import nearbyLocations, nzlocations
+import app.weather.codes as codes
 import calendar
 from datetime import datetime
 
