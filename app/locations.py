@@ -28,6 +28,3 @@ def nearbyLocations(p, points, n):
     s = sorted(points, key=partial(distance, p))
 
     return list(s[0:n])
-
-with open('app//static/nzlocations.json') as f:
-    nzlocations = json.load(f)

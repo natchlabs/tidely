@@ -1,12 +1,12 @@
-from flask import Flask
-from flask_cors import CORS, cross_origin
-
-import app.controllers as controllers
-import app.weather.filters as filters
-from app.locations import nearbyLocations, nzlocations
-import app.weather.codes as codes
 import calendar
 from datetime import datetime
+
+from flask import Flask, request
+from flask_cors import CORS
+
+import app.controllers as controllers
+import app.weather.codes as codes
+import app.weather.filters as filters
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -16,10 +16,13 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 walking = filters.WeatherConfiguration('Walking', [ filters.WeatherCodeMatcher(codes.calm), filters.TimeMatcher(5, 22) ])
 rainCollecting = filters.WeatherConfiguration('Rain collecting', [ filters.WeatherCodeMatcher(codes.raining), filters.TimeMatcher(5, 22) ])
 
-@app.route('/<lat>,<lng>')
-def getNearbyRecommendations(lat, lng):
-    lat, lng = float(lat), float(lng)
-    locations = nearbyLocations({ 'lat': lat, 'lng': lng }, nzlocations, 5)
+@app.route('/',  methods=['POST'])
+def getRecommendations():
+    locations = [{
+        'name': data['activity'],
+        'lat': float(data['location']['lat']),
+        'lng': float(data['location']['lng'])
+    } for data in request.json]
 
     configurations = [ rainCollecting, walking ]
     return {
